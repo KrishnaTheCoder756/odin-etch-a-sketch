@@ -6,3 +6,4 @@ _License - MIT License_
 
 ### How does it function ? 
 **Hover your mouse over the grids to draw**. You can change color of drawing, the area of grid. You can also reset the grid when you feel you are done drawing.
+You can draw minecraft objects here!
