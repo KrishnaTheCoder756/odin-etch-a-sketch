@@ -1,45 +1,70 @@
 const container = document.createElement("div");
 const main = document.querySelector(".main");
-const heading = document.getElementsByTagName("h1");
-const applyBtn = document.querySelector(".btn");
 const slider = document.getElementById("item");
 let sliderValue = document.getElementById("slidervalue");
 const color = document.getElementById("colorpicker");
+const gridColorPicker = document.getElementById("gridColorPicker");
 const resetBtn = document.getElementById("reset");
-
-resetBtn.addEventListener("click", function (e) {
-	e.preventDefault();
-	const cells = document.querySelectorAll(".cell");
-	cells.forEach((c) => {
-		c.style.backgroundColor = "white";
-	});
-});
+const downloadBtn = document.getElementById("download");
 
 main.appendChild(container);
-
 container.classList.add("container");
 
-slider.addEventListener("input", createGrids);
+let drawing = false;
 
-function createGrids(e) {
+container.addEventListener("mousedown", () => (drawing = true));
+container.addEventListener("mouseup", () => (drawing = false));
+container.addEventListener("mouseleave", () => (drawing = false));
+
+slider.addEventListener("input", createGrids);
+resetBtn.addEventListener("click", resetCanvas);
+downloadBtn.addEventListener("click", downloadArt);
+gridColorPicker.addEventListener("input", updateGridColor);
+
+function createGrids() {
 	container.innerHTML = "";
 	let gridSide = slider.value;
-	val = slider.value;
 	let gridArea = gridSide * gridSide;
-	container.setAttribute(
-		"style",
-		`grid-template-columns: repeat(${val}, 2fr); grid-template-rows: repeat(${val}, 2fr);`
-	);
+	container.style.gridTemplateColumns = `repeat(${gridSide}, 2fr)`;
+	container.style.gridTemplateRows = `repeat(${gridSide}, 2fr)`;
+
 	for (let i = 0; i < gridArea; i++) {
 		let div = document.createElement("div");
-		container.appendChild(div);
 		div.classList.add("cell");
-		div.style.boxSizing = "border-box";
 		div.style.backgroundColor = "white";
-		div.addEventListener("mousemove", function (e) {
+		div.style.boxSizing = "border-box";
+		div.style.borderColor = gridColorPicker.value;
+		div.addEventListener("mousemove", (e) => {
+			if (drawing) e.target.style.backgroundColor = color.value;
+		});
+		div.addEventListener("mousedown", (e) => {
 			e.target.style.backgroundColor = color.value;
 		});
+		container.appendChild(div);
 	}
+}
+
+function resetCanvas(e) {
+	e.preventDefault();
+	document.querySelectorAll(".cell").forEach((cell) => {
+		cell.style.backgroundColor = "white";
+	});
+}
+
+function updateGridColor() {
+	document.querySelectorAll(".cell").forEach((cell) => {
+		cell.style.borderColor = gridColorPicker.value;
+	});
+}
+
+function downloadArt() {
+	e.preventDefault(); 
+	html2canvas(container).then((canvas) => {
+		const link = document.createElement("a");
+		link.href = canvas.toDataURL("image/png");
+		link.download = "etch_a_sketch_artwork.png";
+		link.click();
+	});
 }
 
 createGrids();

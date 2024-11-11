@@ -1,59 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Etch-A-Sketch - Krishna</title>
-		<link rel="stylesheet" href="style.css" />
-		<link
-			rel="stylesheet"
-			href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
-			integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M"
-			crossorigin="anonymous"
-		/>
-	</head>
-	<body>
-		<div class="main">
-			<h1 id="heading">Etch-A-Sketch: The Ultimate Fun App</h1>
-			<h2 style="color: aliceblue" id="def">
-				Hover over with your mouse and see the magic happen!
-			</h2>
-			<form id="addForm" class="form-inline mb-3">
-				<div class="config">
-					<p id="colorselector">
-						Select Color: <input type="color" id="colorpicker" />
-					</p>
-					<div
-						style="
-							display: flex;
-							justify-content: center;
-							align-items: center;
-							gap: 0.5rem;
-						"
-						class="pref"
-					>
-						<div id="textGrid">Number of Grids Per Side:</div>
-						<input
-							type="range"
-							id="item"
-							min="2"
-							max="100"
-							value="2"
-							oninput="slidervalue.value = item.value"
-						/>
-						<output id="slidervalue">2</output>
-						<input
-							type="submit"
-							id="reset"
-							value="Reset Canvas"
-							class="btn btn-primary"
-						/>
-					</div>
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Pixel Art Canvas - Krishna</title>
+	<link rel="stylesheet" href="style.css" />
+	<link
+		rel="stylesheet"
+		href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+		integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M"
+		crossorigin="anonymous"
+	/>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+	<div class="main">
+		<h1 id="heading">Pixel Art Canvas: Create and Download Your Art!</h1>
+		<h2 style="color: aliceblue" id="def">
+			Click and drag over the canvas to draw your masterpiece!
+		</h2>
+		<form id="addForm" class="form-inline mb-3">
+			<div class="config">
+				<p id="colorselector">
+					Draw Color: <input type="color" id="colorpicker" />
+				</p>
+				<p id="gridColorSelector">
+					Grid Color: <input type="color" id="gridColorPicker" />
+				</p>
+				<div class="pref">
+					<div id="textGrid">Grid Size:</div>
+					<input
+						type="range"
+						id="item"
+						min="2"
+						max="100"
+						value="2"
+						oninput="slidervalue.value = item.value"
+					/>
+					<output id="slidervalue">2</output>
+					<input type="submit" id="reset" value="Reset Canvas" class="btn btn-primary" />
+					<input type="button" id="download" value="Download Artwork" class="btn btn-secondary" />
 				</div>
-			</form>
-		</div>
+			</div>
+		</form>
+	</div>
 
-		<script src="script.js" defer></script>
-	</body>
+	<script src="script.js" defer></script>
+</body>
 </html>
