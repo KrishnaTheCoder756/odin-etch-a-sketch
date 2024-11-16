@@ -57,10 +57,6 @@ body {
     cursor: crosshair;
 }
 
-.cell:hover {
-    opacity: 0.7;
-}
-
 .config {
     display: flex;
     flex-direction: column;
