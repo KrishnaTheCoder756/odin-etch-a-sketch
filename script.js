@@ -7,64 +7,71 @@ const gridColorPicker = document.getElementById("gridColorPicker");
 const resetBtn = document.getElementById("reset");
 const downloadBtn = document.getElementById("download");
 
+let currentColor = "#000000";
+let gridColor = "#ddd";
+let drawing = false;
+
 main.appendChild(container);
 container.classList.add("container");
 
-let drawing = false;
+function createGrids() {
+    container.style.gridTemplateColumns = `repeat(${slider.value}, 1fr)`;
+    container.style.gridTemplateRows = `repeat(${slider.value}, 1fr)`;
+    
+    container.innerHTML = '';
+    for (let i = 0; i < slider.value * slider.value; i++) {
+        const cell = document.createElement("div");
+        cell.classList.add("cell");
+        cell.style.backgroundColor = "white";
+        cell.style.border = `1px solid ${gridColor}`;
+        container.appendChild(cell);
+    }
+}
 
-container.addEventListener("mousedown", () => (drawing = true));
-container.addEventListener("mouseup", () => (drawing = false));
-container.addEventListener("mouseleave", () => (drawing = false));
+function handleDrawing(e) {
+    if (!drawing) return;
+    if (e.target.classList.contains('cell')) {
+        e.target.style.backgroundColor = currentColor;
+    }
+}
+
+container.addEventListener("mousemove", handleDrawing);
+container.addEventListener("mousedown", (e) => {
+    drawing = true;
+    handleDrawing(e);
+});
+container.addEventListener("mouseup", () => drawing = false);
+container.addEventListener("mouseleave", () => drawing = false);
+
+color.addEventListener("input", (e) => {
+    currentColor = e.target.value;
+});
+
+gridColorPicker.addEventListener("input", (e) => {
+    gridColor = e.target.value;
+    document.querySelectorAll(".cell").forEach(cell => {
+        cell.style.borderColor = gridColor;
+    });
+});
 
 slider.addEventListener("input", createGrids);
-resetBtn.addEventListener("click", resetCanvas);
-downloadBtn.addEventListener("click", downloadArt);
-gridColorPicker.addEventListener("input", updateGridColor);
 
-function createGrids() {
-	container.innerHTML = "";
-	let gridSide = slider.value;
-	let gridArea = gridSide * gridSide;
-	container.style.gridTemplateColumns = `repeat(${gridSide}, 2fr)`;
-	container.style.gridTemplateRows = `repeat(${gridSide}, 2fr)`;
+resetBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    document.querySelectorAll(".cell").forEach(cell => {
+        cell.style.backgroundColor = "white";
+    });
+});
 
-	for (let i = 0; i < gridArea; i++) {
-		let div = document.createElement("div");
-		div.classList.add("cell");
-		div.style.backgroundColor = "white";
-		div.style.boxSizing = "border-box";
-		div.style.borderColor = gridColorPicker.value;
-		div.addEventListener("mousemove", (e) => {
-			if (drawing) e.target.style.backgroundColor = color.value;
-		});
-		div.addEventListener("mousedown", (e) => {
-			e.target.style.backgroundColor = color.value;
-		});
-		container.appendChild(div);
-	}
-}
-
-function resetCanvas(e) {
-	e.preventDefault();
-	document.querySelectorAll(".cell").forEach((cell) => {
-		cell.style.backgroundColor = "white";
-	});
-}
-
-function updateGridColor() {
-	document.querySelectorAll(".cell").forEach((cell) => {
-		cell.style.borderColor = gridColorPicker.value;
-	});
-}
-
-function downloadArt() {
-	e.preventDefault(); 
-	html2canvas(container).then((canvas) => {
-		const link = document.createElement("a");
-		link.href = canvas.toDataURL("image/png");
-		link.download = "etch_a_sketch_artwork.png";
-		link.click();
-	});
-}
+downloadBtn.addEventListener("click", () => {
+    html2canvas(container).then(canvas => {
+        const link = document.createElement("a");
+        link.href = canvas.toDataURL("image/png");
+        link.download = "etch-a-sketch-artwork.png";
+        link.click();
+    }).catch(error => {
+        console.error("Error generating canvas:", error);
+    });
+});
 
 createGrids();
